@@ -1,13 +1,18 @@
-package cn.bittonet.birthkalendar;
+package cn.bittonet.birthkalendar.activity;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
+import android.content.Context;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.TextView;
+import com.gyf.barlibrary.ImmersionBar;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 
@@ -19,6 +24,13 @@ import java.lang.reflect.Method;
 public abstract class BaseActivity extends AppCompatActivity {
 
     private static boolean isMiUi = false;
+
+    protected Context context;
+
+    protected Activity activity;
+
+    protected ImmersionBar       mImmersionBar;
+
 
     protected void initWindow() {
 
@@ -33,11 +45,62 @@ public abstract class BaseActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        init();
         initWindow();
         setContentView(getLayoutId());
         initView();
         initData();
     }
+    /**
+     * 是否可以使用沉浸式
+     * Is immersion bar enabled boolean.
+     *
+     * @return the boolean
+     */
+    protected boolean isImmersionBarEnabled() {
+        return true;
+    }
+
+    private void init(){
+        context = this;
+        activity = this;
+        //初始化沉浸式
+        if (isImmersionBarEnabled()) {
+            initImmersionBar();
+        }
+    }
+
+    protected void initImmersionBar() {
+        //在BaseActivity里初始化
+        mImmersionBar = ImmersionBar.with(this);
+        mImmersionBar.keyboardEnable(true)//解决软键盘与底部输入框冲突问题，默认为false
+                     .init();
+    }
+
+    protected void initImmersionBar(Toolbar toolbar, boolean isDark) {
+        //在BaseActivity里初始化
+        mImmersionBar = ImmersionBar.with(this);
+        mImmersionBar.titleBar(toolbar).keyboardEnable(true);//解决软键盘与底部输入框冲突问题，默认为false
+        if (isDark) {
+            mImmersionBar.statusBarDarkFont(true, 0.2f)// 解决白色状态栏问题
+                         .init();
+        } else {
+            mImmersionBar.init();
+        }
+    }
+
+    protected void initImmersionBar(View statusBarView, boolean isDark) {
+        //在BaseActivity里初始化
+        mImmersionBar = ImmersionBar.with(this);
+        mImmersionBar.statusBarView(statusBarView).keyboardEnable(true);//解决软键盘与底部输入框冲突问题，默认为false
+        if (isDark) {
+            mImmersionBar.statusBarDarkFont(true, 0.2f)// 解决白色状态栏问题
+                         .init();
+        } else {
+            mImmersionBar.init();
+        }
+    }
+
 
     /**
      * 设置小米黑色状态栏字体
@@ -142,5 +205,48 @@ public abstract class BaseActivity extends AppCompatActivity {
         } else if (type == 3) {
             getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN | View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
         }
+    }
+
+    /**
+     * 初始化 Toolbar
+     *
+     * @param toolbar
+     * @param homeAsUpEnabled
+     * @param title
+     */
+    public void initToolBar(Toolbar toolbar, boolean homeAsUpEnabled, String title) {
+
+        toolbar.setTitle(title);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(homeAsUpEnabled);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onBackPressed();
+            }
+        });
+    }
+
+    /**
+     * 初始化 Toolbar
+     *
+     * @param toolbar
+     * @param tvTitle
+     * @param homeAsUpEnabled
+     * @param title
+     */
+    public void initToolBar(Toolbar toolbar, TextView tvTitle, boolean homeAsUpEnabled,
+            String title) {
+
+        toolbar.setTitle("");
+        tvTitle.setText(title);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(homeAsUpEnabled);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onBackPressed();
+            }
+        });
     }
 }

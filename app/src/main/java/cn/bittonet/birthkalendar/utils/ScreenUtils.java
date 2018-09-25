@@ -10,13 +10,6 @@ import android.view.Display;
 import android.view.View;
 import android.view.WindowManager;
 
-/**
- * MyLibrary
- * Package chingtech.library.utils
- * Description:
- * Created by 师春雷
- * Created at 2017/4/11 11:24
- */
 public class ScreenUtils {
 
     private ScreenUtils() {
