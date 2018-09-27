@@ -31,11 +31,6 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     protected ImmersionBar       mImmersionBar;
 
-
-    protected void initWindow() {
-
-    }
-
     protected abstract int getLayoutId();
 
     protected abstract void initView();
@@ -45,9 +40,8 @@ public abstract class BaseActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        init();
-        initWindow();
         setContentView(getLayoutId());
+        init();
         initView();
         initData();
     }
