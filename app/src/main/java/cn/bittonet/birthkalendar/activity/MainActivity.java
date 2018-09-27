@@ -1,5 +1,6 @@
 package cn.bittonet.birthkalendar.activity;
 
+import android.content.res.ColorStateList;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
@@ -47,7 +48,7 @@ public class MainActivity extends BaseActivity {
         //默认 >3 的选中效果会影响ViewPager的滑动切换时的效果，故利用反射去掉
         BottomNavigationViewHelper.disableShiftMode(mNavigation);
         mNavigation.setItemIconTintList(null);
-//        mNavigation.setItemTextColor(getResources()(R.color.black));
+        mNavigation.setItemTextColor(ColorStateList.valueOf(getResources().getColor(R.color.black)));
         mNavigation.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
